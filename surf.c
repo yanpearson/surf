@@ -550,6 +550,11 @@ loaduri(Client *c, const Arg *a)
 	    g_str_has_prefix(uri, "file://")  ||
 	    g_str_has_prefix(uri, "about:")) {
 		url = g_strdup(uri);
+	} else if (!stat(uri, &st) && (path = realpath(uri, NULL))) {
+		url = g_strdup_printf("file://%s", path);
+		free(path);
+	} else if (*uri == ' ') {
+		url = g_strdup_printf("%s%s", searchengine, uri + 1);
 	} else {
 		if (uri[0] == '~')
 			apath = untildepath(uri);
