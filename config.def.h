@@ -57,6 +57,18 @@ static UriParameters uriparams[] = {
 	}, },
 };
 
+static char *linkselect_curwin [] = { "/bin/sh", "-c",
+	"surf_linkselect.sh $0 'Link' | xargs -r xprop -id $0 -f _SURF_GO 8s -set _SURF_GO",
+	winid, NULL
+};
+
+static char *linkselect_newwin [] = { "/bin/sh", "-c",
+	"surf_linkselect.sh $0 'Link (new window)' | xargs -r surf",
+	winid, NULL
+};
+
+static char *editscreen[] = { "/bin/sh", "-c", "edit_screen.sh", NULL };
+
 /* default window size: width, height */
 static int winsize[] = { 800, 600 };
 
@@ -174,7 +186,7 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_o,      toggleinspector, { 0 } },
 
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_c,      toggle,     { .i = CaretBrowsing } },
-	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_f,      toggle,     { .i = FrameFlattening } },
+	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_w,      toggle,     { .i = FrameFlattening } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_g,      toggle,     { .i = Geolocation } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_s,      toggle,     { .i = JavaScript } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_i,      toggle,     { .i = LoadImages } },
@@ -182,6 +194,10 @@ static Key keys[] = {
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_b,      toggle,     { .i = ScrollBars } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_t,      toggle,     { .i = StrictTLS } },
 	{ MODKEY|GDK_SHIFT_MASK, GDK_KEY_m,      toggle,     { .i = Style } },
+
+	{ MODKEY,                GDK_KEY_f, externalpipe, { .v = linkselect_curwin } },
+	{ GDK_SHIFT_MASK|MODKEY, GDK_KEY_f, externalpipe, { .v = linkselect_newwin } },
+	{ MODKEY,                GDK_KEY_o, externalpipe, { .v = editscreen        } }
 };
 
 static char *searchengine = "https://duckduckgo.com/?q=";
